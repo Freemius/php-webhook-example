@@ -39,9 +39,10 @@
     switch ($fs_event->type)
     {
         case 'install.installed':
-            $email = $fs_event->user->email;
-            $first = $fs_event->user->first;
-            $last  = $fs_event->user->last;
+            $user  = $fs_event->objects->user;
+            $email = $user->email;
+            $first = $user->first;
+            $last  = $user->last;
 
             /**
              * MailChimp SDK for API v3  can be downloaded from here:
@@ -63,11 +64,12 @@
 
             break;
         case 'install.uninstalled':
-            $email = $fs_event->user->email;
-            $first = $fs_event->user->first;
-            $last  = $fs_event->user->last;
+            $user  = $fs_event->objects->user;
+            $email = $user->email;
+            $first = $user->first;
+            $last  = $user->last;
 
-            $fs_uninstall = $fs->Api("/installs/{$event_json->install->id}/uninstall.json");
+            $fs_uninstall = $fs->Api("/installs/{$fs_event->objects->install->id}/uninstall.json");
 
             // Send email with your favorite service (we use SendGrid).
             define('FS__UNINSTALL_REASON_NO_LONGER_NEEDED', 1);
