@@ -24,9 +24,9 @@
      * Freemius PHP SDK can be downloaded from GitHub:
      *  https://github.com/Freemius/php-sdk
      */
-    require_once '/path/to/freemius/sdk/Freemius.php';
+    require_once '/path/to/freemius/sdk/FreemiusWordPress.php';
 
-    $fs = new Freemius_Api(
+    $fs = new Freemius_Api_WordPress(
         'plugin',
         'YOUR_PLUGIN_ID',
         'YOUR_PLUGIN_PUBLIC_KEY',
