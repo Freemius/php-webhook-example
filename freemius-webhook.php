@@ -9,16 +9,23 @@
      * @since       1.0.3
      */
 
-    // Retrieve the request's body and parse it as JSON
+    // Retrieve the request's body.
     $input = @file_get_contents("php://input");
 
-    $event_json = json_decode($input);
+    // Verify the authenticity of the request.
+    $hash = hash_hmac('sha256', $input, 'YOUR_PLUGIN_SECRET_KEY');
 
-    if ( ! isset($event_json->id))
+    $signature = $_SERVER['HTTP_X_SIGNATURE'] ?? '';
+
+    if ( ! hash_equals($hash, $signature))
     {
+        // Invalid signature, don't expose any data to attackers.
         http_response_code(200);
-        exit();
+        exit;
     }
+
+    // Decode the request.
+    $fs_event = json_decode($input);
 
     /**
      * Freemius PHP SDK can be downloaded from GitHub:
@@ -32,9 +39,6 @@
         'YOUR_PLUGIN_PUBLIC_KEY',
         'YOUR_PLUGIN_SECRET_KEY'
     );
-
-    $fs_event = $fs->Api("/events/{$event_json->id}.json");
-
 
     switch ($fs_event->type)
     {
